@@ -1,0 +1,5 @@
+1- Just email address/Online information 
+2- SSN/Personal details 
+3- Credit card information 
+4- Email password/Health records 
+5- Full bank account details
