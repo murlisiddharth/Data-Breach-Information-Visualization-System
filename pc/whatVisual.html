@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+<meta charset="utf-8">
+<title>DBVIZ:What visual?</title>
+<link rel="stylesheet" type="text/css" href="d3.parcoords.css">
+<link rel="stylesheet" type="text/css" href="../sweetalert.css">
+<script src="../sweetalert.min.js"></script>
+<script src="examples/lib/d3.min.js"></script>
+<script src="examples/lib/sylvester.js"></script>
+<script src="examples/lib/underscore.js"></script>
+<script src="examples/lib/underscore.math.js"></script>
+<script src="d3.parcoords.js"></script>
+<script src="examples/lib/divgrid.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland" />
+<!-- SlickGrid -->
+<link rel="stylesheet" href="examples/lib/slickgrid/slick.grid.css" type="text/css"/>
+<link rel="stylesheet" href="examples/lib/slickgrid/jquery-ui-1.8.16.custom.css" type="text/css"/>
+<link rel="stylesheet" href="examples/lib/slickgrid/examples.css" type="text/css"/>
+<link rel="stylesheet" href="examples/lib/slickgrid/slick.pager.css" type="text/css"/>
+<script src="examples/lib/slickgrid/jquery-1.7.min.js"></script>
+<script src="examples/lib/slickgrid/jquery.event.drag-2.0.min.js"></script>
+<script src="examples/lib/slickgrid/slick.core.js"></script>
+<script src="examples/lib/slickgrid/slick.grid.js"></script>
+<script src="examples/lib/slickgrid/slick.pager.js"></script>
+<script src="examples/lib/slickgrid/slick.dataview.js"></script>
+<!-- End SlickGrid -->
+<style>
+#grid, #pager {
+  position: relative;
+  width: 100%;
+}
+#pager {
+    height: 20px;
+}
+.slick-row:hover {
+  font-weight: bold;
+  color: #069;
+}
+#tooltip{
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color:black;
+  }
+#legend{
+	color:#ffffff;
+}
+h1 {
+        font-size: 22px;
+        font-family: "Iceland", sans-serif, cursive;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 25px;
+    	margin-bottom: 25px;
+    	margin-right: 20px;
+    	margin-left: 20px;
+}
+h3{
+		font-size: 55px;
+        font-family: "Iceland", sans-serif, cursive;
+        font-weight: bold;
+        text-align: center;
+}
+.title{
+    	width: 900px;
+        margin: 0 auto;
+        box-shadow: 0px 0px 18px 0px rgba(51,153,255, 1);
+        padding: 5px 0;
+        color: #ffffff;
+        background-color: rgb(0,0,0);
+    }
+.body,.description{
+     	width: 900px;
+        margin: 15px auto;
+        box-shadow: 0px 0px 18px 0px rgba(0,0,0, 1);
+        padding: 5px 0;
+        color: #ffffff;
+        background-color: rgb(0,0,0);
+}
+#controls, #controlsDescription{
+	border: 1px solid white;
+}  
+#visual, #parallelCordinates{
+		width: 900px;
+        margin: 15px auto;
+        box-shadow: 0px 0px 18px 0px rgba(0,0,0, 1);
+        padding: 5px 0;
+        color: #ffffff;
+        background-color: rgb(0,0,0);
+        
+}
+</style>  
+<body background="../bgTheme.jpg">
+<div class='title'><h3>What happened in the Data Breach?</h3></div>
+<div class='description'><h1 style="text-align:justify">
+When a data breach occurs at an organization it is important to understand what happend in the breach? Some of the questions that arise are: <br/> &bull; What kind of data was compromised?<br/> &bull; What industry the company belongs to?<br/> &bull; How many records were compromised?<br/>
+This Parallel coordinate visualization helps to answer these questions and allows the user to track the incident and understand the nature of the data breach incident.<br/>
+<br/><u>The data compromised in a data breach can be distinguished into the following 5 categories:</u><br/>
+&bull;1 : Just email address/Online information<br/>
+&bull;2 : SSN/Personal details <br/>
+&bull;3 : Credit card information<br/>
+&bull;4 : Email password/Health records <br/>
+&bull;5 : Full bank account details<br/>
+</h1></div>
+<div class='body'>
+<div id='controlsDescription'><h1 style="text-align:justify">
+<b>Controls :</b></p>
+<b>Brush:</b> Drag vertically along an axis.<br>
+<b>Remove Brush:</b>  Tap the axis background.<br>
+<b>Reorder Axes:</b>  Drag a label horizontally.<br>
+<b>Invert Axis:</b>  Tap an axis label.<br>
+<b>Remove Axis:</b>  Drag axis label to the left edge.<br>
+</h1></div>
+<div id='controls'><h1 style="text-align:justify">
+<table>
+<tr>
+<td>
+<div id="bundleDimension">Cluster By : </div><br/>  
+Bundling
+<p>Curve smoothness [Value :<strong id="smooth">0.0</strong>]<br/>
+<input type="range" min="0" max="0.25" value="0.0" step="0.01" id="smoothness"/></td>
+<td>Bundling strength [Value :<strong id="strength">0</strong>]<br/>
+<input type="range" min="0" max="1" value="0" step="0.05" id="bundling"/></td>
+</tr>
+</table>
+  <center><label for="sltBrushMode">Brush mode:</label>
+  <select id="sltBrushMode">
+  </select>
+  <label id="lblPredicate" for="sltPredicate">Predicate:</label>
+  <select id="sltPredicate">
+    <option>AND</option>
+    <option>OR</option>
+  </select>
+  <button id="btnReset">Reset Brushes</button>
+  </center>
+</h1></div>
+</div>
+<div id="parallelCordinates" class="parcoords" style="width:1300px;margin-left:-250px;height:440px;background-color:black"></div>
+<div id='visual'>
+<table><tr>
+<td><div id="pager"  style="width:400px;margin-left:-250px; right:-280px;"></div></td></tr>
+<tr><td><div id="grid" style="width:400px;margin-left:-250px;height:320px;right:-280px;"></div></td>
+<td><div id="story" style="width:200px;height:320px;margin-left:300px;font-family:Iceland, sans-serif, cursive;text-align:justify;"></div></td></tr>
+</table>
+</div>
+
+<script id="progressive">// load csv file and create the chart
+var colors = d3.scale.category20c(); 
+
+d3.csv('../dataSet.csv', function(data) {
+  var colorgen = d3.scale.ordinal()
+    .range(["#a6cee3","#1f78b4","#b2df8a","#33a02c",
+            "#fb9a99","#e31a1c","#fdbf6f","#ff7f00",
+            "#cab2d6","#6a3d9a","#ffff99","#b15928"]);
+  
+ var color = function(d) { return colors(d.data_sensitivity); };
+
+ // console.log(color);
+
+  var parcoords = d3.parcoords()("#parallelCordinates")
+    .data(data)
+    .hideAxis(["entity"])
+    .hideAxis(["story"])
+    .hideAxis(["1st source link"])
+    .hideAxis(["2nd source link"])
+    .hideAxis(["3rd source"])
+    .color(color)
+    .alpha(0.75)
+    .composite("light")
+    .margin({ top: 24, left: 150, bottom: 12, right: 0 })
+    .mode("queue")
+    .render()
+    .reorderable()
+    .interactive()
+    .bundlingStrength(0) // set bundling strength
+    .smoothness(0)
+    .bundleDimension("data_sensitivity")
+    .showControlPoints(true)
+    .brushMode("1D-axes");  // enable brushing
+
+     // slickgrid needs each data element to have an id
+  data.forEach(function(d,i) { d.id = d.id || i; });
+
+   // setting up grid
+  var column_keys = d3.keys(data[0]);
+  var columns = column_keys.map(function(key,i) {
+    return {
+      id: key,
+      name: key,
+      field: key,
+      sortable: true
+    }
+  });
+
+  var options = {
+    enableCellNavigation: true,
+    enableColumnReorder: false,
+    multiColumnSort: false
+  };
+
+  var dataView = new Slick.Data.DataView();
+  var grid = new Slick.Grid("#grid", dataView, columns, options);
+  var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));
+
+  // wire up model events to drive the grid
+  dataView.onRowCountChanged.subscribe(function (e, args) {
+    grid.updateRowCount();
+    grid.render();
+  });
+
+  dataView.onRowsChanged.subscribe(function (e, args) {
+    grid.invalidateRows(args.rows);
+    grid.render();
+  });
+
+  // column sorting
+  var sortcol = column_keys[0];
+  var sortdir = 1;
+
+  function comparer(a, b) {
+    var x = a[sortcol], y = b[sortcol];
+    return (x == y ? 0 : (x > y ? 1 : -1));
+  }
+  
+  // click header to sort grid column
+  grid.onSort.subscribe(function (e, args) {
+    sortdir = args.sortAsc ? 1 : -1;
+    sortcol = args.sortCol.field;
+
+    if ($.browser.msie && $.browser.version <= 8) {
+      dataView.fastSort(sortcol, args.sortAsc);
+    } else {
+      dataView.sort(comparer, args.sortAsc);
+    }
+  });
+
+  // highlight row in chart
+  grid.onMouseEnter.subscribe(function(e,args) {
+    var i = grid.getCellFromEvent(e).row;
+    var d = parcoords.brushed() || data;
+    parcoords.highlight([d[i]]);
+    //console.log([d[i]][0].entity);
+    d3.select("#story")
+      .text([d[i]][0].story);
+  });
+  grid.onMouseLeave.subscribe(function(e,args) {
+    parcoords.unhighlight();
+  });
+
+  // fill grid with data
+  gridUpdate(data);
+
+  // update grid on brush
+  parcoords.on("brush", function(d) {
+    gridUpdate(d);
+  });
+
+  function gridUpdate(data) {
+    dataView.beginUpdate();
+    dataView.setItems(data);
+    dataView.endUpdate();
+  };
+
+    // smoothness
+    d3.select("#smoothness").on("change", function() {
+    d3.select("#smooth").text(this.value);
+    parcoords.smoothness(this.value).render();
+  });
+
+//enabling brush mode
+  var sltBrushMode = d3.select('#sltBrushMode')
+
+sltBrushMode.selectAll('option')
+  .data(parcoords.brushModes())
+  .enter()
+    .append('option')
+    .text(function(d) { return d; });
+
+sltBrushMode.on('change', function() {
+  parcoords.brushMode(this.value);
+  switch(this.value) {
+  case 'None':
+   // d3.select("#pStrums").style("visibility", "hidden");
+    d3.select("#lblPredicate").style("visibility", "hidden");
+    d3.select("#sltPredicate").style("visibility", "hidden");
+    d3.select("#btnReset").style("visibility", "hidden");
+    break;
+  case '2D-strums':
+   // d3.select("#pStrums").style("visibility", "visible");
+    break;
+  default:
+   // d3.select("#pStrums").style("visibility", "hidden");
+    d3.select("#lblPredicate").style("visibility", "visible");
+    d3.select("#sltPredicate").style("visibility", "visible");
+    d3.select("#btnReset").style("visibility", "visible");
+    break;
+  }
+});
+
+sltBrushMode.property('value', '1D-axes');
+
+  d3.select('#btnReset').on('click', function() {parcoords.brushReset();})
+d3.select('#sltPredicate').on('change', function() {
+  parcoords.brushPredicate(this.value);
+});
+  
+  // bundling strength slider
+  d3.select("#bundling").on("change", function() {
+    d3.select("#strength").text(this.value);
+    parcoords.bundlingStrength(this.value).render();
+  });
+  
+  var select = d3.select("#bundleDimension").append("select").on("change", changeBundle);
+  
+  var options = select.selectAll('option')
+    .data(parcoords.dimensions());
+  
+  options
+    .enter()
+    .append("option")
+    .attr("value", function(d) {return d;})
+    .text(function(d) {return d;}); 
+
+  function changeBundle() {
+     parcoords.bundleDimension(this.value);
+     var legendsUpdateVar = this.value;
+     //console.log(this.value);
+     updateLegends(legendsUpdateVar);
+  }
+
+  function updateLegends(legendsUpdateVar){
+
+  
+  d3.selectAll('.legend').remove();
+  switch(legendsUpdateVar) {
+  case 'data_sensitivity':
+      var legend = parcoords.svg.selectAll(".legend")
+      .data(d3.map(data, function(d){return d.data_sensitivity;}).keys())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+      parcoords.bundleDimension("data_sensitivity")
+      parcoords.color(function(data) { return colors(data.data_sensitivity);})
+      parcoords.bundlingStrength(0).render();
+
+    break;
+  case 'organization':
+      var legend = parcoords.svg.selectAll(".legend")
+      .data(d3.map(data, function(d){return d.organization;}).keys())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+      parcoords.bundleDimension("organization")
+      parcoords.color(function(data) { return colors(data.organization);})
+      parcoords.bundlingStrength(0).render();
+
+    break;
+  case 'year':
+      var legend = parcoords.svg.selectAll(".legend")
+      .data(d3.map(data, function(d){return d.year;}).keys())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+      parcoords.bundleDimension("year")
+      parcoords.color(function(data) { return colors(data.year);})
+      parcoords.bundlingStrength(0).render();
+
+    break; 
+  case 'method_of_leak':
+    var legend = parcoords.svg.selectAll(".legend")
+    .data(d3.map(data, function(d){return d.method_of_leak;}).keys())
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    parcoords.bundleDimension("method_of_leak")
+    parcoords.color(function(data) { return colors(data.method_of_leak);})
+    parcoords.bundlingStrength(0).render();
+
+  break; 
+  default:
+    var legend = parcoords.svg.selectAll(".legend")
+      .data(d3.map(data, function(d){return d.data_sensitivity;}).keys())
+      .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+      parcoords.bundleDimension("data_sensitivity")
+      parcoords.color(function(data) { return colors(data.data_sensitivity);})
+      parcoords.bundlingStrength(0).render();
+
+    break;
+  }
+
+
+ // draw legend colored rectangles
+  legend.append("rect")
+      .attr("x", -140)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", function(d) { return colors(d);})
+
+  // draw legend text
+  legend.append("text")
+      .attr("x", -120)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      //.style("text-anchor", "end")
+      .text(function(d) { return d;})
+      .style("font", "20px sans-serif")
+      .style("fill","white")
+      .style("font-family","Iceland,sans-serif, cursive");
+  }
+ 
+  parcoords.svg.selectAll("text")
+    .style("font", "15px sans-serif")
+    .style("fill","white")
+    .style("font-family","Iceland,sans-serif, cursive");
+
+  updateLegends("data_sensitivity");
+
+ });
+</script>
+</body>
+<script type="text/javascript">
+swal({ html:true, title:'<i>What Happened in the Data Breach?</i>', text:'<h1 style="text-align:justify"><center>Story of the data breaches for all companies.</center></h1>'})
+</script>
+</html>
+
