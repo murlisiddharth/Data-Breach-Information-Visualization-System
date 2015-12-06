@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland" />
+<link rel="stylesheet" type="text/css" href="sweetalert.css">
+<script src="sweetalert.min.js"></script>
+
+<style>
+h1 {
+	font-size: 22px;
+	font-family: "Iceland", sans-serif, cursive;
+	font-weight: bold;
+	text-align: center;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	margin-right: 20px;
+	margin-left: 20px;
+}
+
+h3 {
+	font-size: 55px;
+	font-family: "Iceland", sans-serif, cursive;
+	font-weight: bold;
+	text-align: center;
+}
+
+.title {
+	width: 800px;
+	margin: 15px auto;
+	box-shadow: 0px 0px 18px 0px rgba(51, 153, 255, 1);
+	padding: 5px 0;
+	color: #ffffff;
+	background-color: rgb(0, 0, 0);
+}
+/* 
+.body, .description {
+	width: 800px;
+	margin: 15px auto;
+	box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 1);
+	padding: 5px 0;
+	color: #ffffff;
+	background-color: rgb(0, 0, 0);
+} */
+
+.axis path, .axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.dot {
+	stroke: #000;
+	target-new: tab ! important;
+}
+
+.tooltip {
+	position: absolute;
+	width: 200px;
+	height: 28px;
+	pointer-events: none;
+}
+</style>
+
+<body background="bgTheme.jpg">
+	<div class='title'>
+		<h3>When the Data Breaches Happened?</h3>
+	</div>
+	<div class='description'><h1 style="text-align:justify"><u>The method by which the data breach occurred are based on 5 categories:</u><br/>1. Accidentally Published : Refers to data breches occurred because the data was published.<br/>2. Hacked : Refers to data breaches occurred because their databases or other resources were taken over by an adversary.<br/>3. Inside Job: Refers to data breaches occurred because of an insider attack.<br/>4. Lost Media: Refers to data breaches occurred because of lost or Stolen Media.<br/>5. Poor Security : Refers to data breaches occurred due to poor security control implementations like weak operational security procedures/policy.<br/>
+<br><u>Industries affected by the above methods of Data Breach range accross:</u><br/>
+	&bull;Government &bull;Retail &bull;Technology &bull;Financial &bull;Media &bull;Web(E-commerce) &bull;Transport &bull;Energy &bull;Telecommunication &bull;Gaming &bull;Military &bull;Academic &bull;Health care<br/></h1>
+	</div>
+	<div class="body">
+	<div class="panel-body fixed-panel-main">
+		<div class="row">
+			<div class="container-fluid">
+				<div class="panel-body fixed-panel" id="d3visual"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="container">
+				<div class="panel-body fixed-panel" id="checkboxinfo">
+					<label class="checkbox-inline"><input type="checkbox"
+						value="government">Government</label> <label
+						class="checkbox-inline"><input type="checkbox"
+						value="retail">Retail</label> <label class="checkbox-inline"><input
+						type="checkbox" value="tech">Tech</label> <label
+						class="checkbox-inline"><input type="checkbox"
+						value="healthcare">Healthcare</label> <label
+						class="checkbox-inline"><input type="checkbox"
+						value="media">Media</label> <label class="checkbox-inline"><input
+						type="checkbox" value="financial">Financial</label> <label
+						class="checkbox-inline"><input type="checkbox" value="web">Web(E-commerce)</label>
+					<label class="checkbox-inline"><input type="checkbox"
+						value="transport">Transport</label> <label class="checkbox-inline"><input
+						type="checkbox" value="energy">Energy</label> <label
+						class="checkbox-inline"><input type="checkbox"
+						value="academic">Academic</label> <label class="checkbox-inline"><input
+						type="checkbox" value="telecoms">Telecoms</label> <label
+						class="checkbox-inline"><input type="checkbox"
+						value="gaming">Gaming</label> <label class="checkbox-inline"><input
+						type="checkbox" value="military">Military</label>
+				</div>
+			</div>
+		</div>
+	</div>
+ </div>
+</body>
+
+
+<script>
+function created3(name)
+{
+  var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+  /* 
+   * value accessor - returns the value to encode for a given data object.
+   * scale - maps value to a visual display encoding, such as a pixel position.
+   * map function - maps from data value to display value
+   * axis - sets up axis
+   */ 
+  // var parsedata = d3.time.format("%Y").parse;
+  // setup x 
+
+  var superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹",
+      formatPower = function(d) { return (d + "").split("").map(function(c) { return superscript[c]; }).join(""); };
+
+  var xValue = function(d) { return d.year;}, // data -> value
+      xScale = d3.scale.linear().range([0, width-80]), // value -> display
+      xMap = function(d) { var val=xValue(d); return xScale(val);}, // data -> display
+      xAxis = d3.svg.axis()
+      .scale(xScale)
+      .orient("bottom")
+      .tickFormat(function(d){ var year = new Date(); console.log(typeof d);
+          year.setFullYear(d);
+          return d3.time.format('%Y')(year);
+      });
+
+  // setup y
+  var yValue = function(d) { return d.no_of_records_stolen;}, // data -> value
+      yScale = d3.scale.log().base(Math.E).domain([Math.exp(0), Math.exp(20)]).range([height, 0]), // value -> display
+      yMap = function(d) {var val = yValue(d);  return yScale(val);}, // data -> display if(isNaN(val)) console.log(d);
+      yAxis = d3.svg.axis()
+      .scale(yScale)
+      .orient("left")
+      .tickFormat(function(d) { return "e" + formatPower(Math.round(Math.log(d))); });
+
+  // setup fill color
+  var cValue = function(d) { return d.organization;},
+      color = d3.scale.category10();
+
+  // add the graph canvas to the body of the webpage
+  var svg = d3.select("#d3visual").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // add the tooltip area to the webpage
+  var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+  // load data
+  d3.csv("dataSet.csv", function(error, data) {
+
+    // console.log(data.length);
+    data = data.filter(function(d){
+        if(name.indexOf(d.organization)==-1){
+            return false;
+        }
+        // d.value = parseInt(d.value, 10);
+        return true;
+    });
+    // console.log(data.length);
+    // change string (from CSV) into number format
+    data.forEach(function(d) {
+      d.year = +d.year;
+      d.no_of_records_stolen = +d.no_of_records_stolen;
+  //    console.log(d);
+    });
+
+    // don't want dots overlapping axis, so add in buffer to data domain
+    xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
+    yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+
+    // x-axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width-60)
+        .attr("y", -15)
+        .style("text-anchor", "end")
+        .text("Year")
+        .style("fill","white")
+        .style("font-family","Iceland,sans-serif, cursive")
+        .style("font-size","15px");
+
+    // y-axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("transform", " rotate(-90)")
+        .attr("y", 15)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("No. of Records Stolen")
+        .style("fill","white")
+        .style("font-family","Iceland,sans-serif, cursive")
+        .style("font-size","15px");
+
+    // draw dots
+    svg.selectAll(".dot")
+      // .attr("transform", "translate(50," + height + ")")
+        .data(data)
+        .enter()
+        .append('a')
+        .attr("xlink:href", function(d) {return d["1st source link"];})
+        .append("circle")
+        .attr("class", "dot")
+        .attr("r", 4.5)
+        .attr("cx", xMap)
+        .attr("cy", yMap)
+        .style("fill", function(d) { return color(cValue(d));})
+        .on("mouseover", function(d) {
+            tooltip.transition()
+                 .duration(200)
+                 .style("opacity", .9);
+            tooltip.html(d["entity"] + "<br/> (" + xValue(d) 
+  	        + ", " + yValue(d) + ")<br/>Story:"+d["story"])
+                 .style("left", (d3.event.pageX + 5) + "px")
+                 .style("top", (d3.event.pageY - 28) + "px")
+                 .style("font-family","Iceland,sans-serif, cursive")
+                 .style("font-size","15px");
+        })
+        .on("mouseout", function(d) {
+            tooltip.transition()
+                 .duration(500)
+                 .style("opacity", 0);
+        })
+        .on("click", function(d){
+            // <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
+
+
+        });
+
+    // draw legend
+    var legend = svg.selectAll(".legend")
+        .data(color.domain())
+      .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(20," + i * 20 + ")"; });
+
+    // draw legend colored rectangles
+    legend.append("rect")
+        .attr("x", width - 18)
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    // draw legend text
+    legend.append("text")
+        .attr("x", width - 24)
+        .attr("y", 9)
+        .attr("dy", ".35em")
+        .style("text-anchor", "end")
+        .text(function(d) { return d;})
+  });
+}
+$(document).ready(function(){
+    var arr=[]
+  created3(arr);
+});
+$('#checkboxinfo :input[type="checkbox"]').on('click',function(){
+    var arr = []
+    $('#checkboxinfo :input').each(function(){
+        if(this.checked){
+            // console.log(this.value);
+            arr.push(this.value);
+        }
+    })
+    // console.log(arr);
+    $('#d3visual').empty();
+    created3(arr);
+});
+</script>
+
+</html>
