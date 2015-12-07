@@ -4,11 +4,16 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Iceland" />
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script
+	src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//fonts.googleapis.com/css?family=Iceland" />
 <link rel="stylesheet" type="text/css" href="sweetalert.css">
 <script src="sweetalert.min.js"></script>
 
@@ -32,26 +37,26 @@ h3 {
 }
 
 .title {
-	width: 800px;
+	width: 968px;
 	margin: 15px auto;
 	box-shadow: 0px 0px 18px 0px rgba(51, 153, 255, 1);
 	padding: 5px 0;
 	color: #ffffff;
 	background-color: rgb(0, 0, 0);
 }
-/* 
+
 .body, .description {
-	width: 800px;
+	width: 968px;
 	margin: 15px auto;
 	box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 1);
 	padding: 5px 0;
 	color: #ffffff;
 	background-color: rgb(0, 0, 0);
-} */
+}
 
 .axis path, .axis line {
-	fill: none;
-	stroke: #000;
+	fill: white;
+	stroke-width: 0px;
 	shape-rendering: crispEdges;
 }
 
@@ -60,53 +65,49 @@ h3 {
 	target-new: tab ! important;
 }
 
-/*.tooltip {
-	position: absolute;
-	width: 200px;
-	height: 28px;
-	pointer-events: none;
-}*/
-
 .d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  font-family: Iceland,sans-serif, cursive;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
+	line-height: 1;
+	font-weight: bold;
+	font-family: Iceland, sans-serif, cursive;
+	padding: 12px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 2px;
 }
-
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 15px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
+	box-sizing: border-box;
+	display: inline;
+	font-size: 15px;
+	width: 100%;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.8);
+	content: "\25BC";
+	position: absolute;
+	text-align: center;
 }
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
+	margin: -1px 0 0 0;
+	top: 100%;
+	left: 0;
 }
-#mainPanel{
-    /*margin-top:50px;*/
-    margin-left:30px;
-    background: black;
+
+#mainPanel {
+	/*margin-top:50px;*/
+	margin-left: 30px;
+	background: black;
 }
-.panel-default > .panel-heading{
-  background: blue;
-}
+
 label {
-  color:white;
+	color: white;
+}
+
+#checkboxinfo {
+	border: 1px solid white;
+	width: 100%;
 }
 </style>
 
@@ -114,267 +115,244 @@ label {
 	<div class='title'>
 		<h3>When the Data Breaches Happened?</h3>
 	</div>
-	<div class='description'><h1 style="text-align:justify"><u>The method by which the data breach occurred are based on 5 categories:</u><br/>1. Accidentally Published : Refers to data breches occurred because the data was published.<br/>2. Hacked : Refers to data breaches occurred because their databases or other resources were taken over by an adversary.<br/>3. Inside Job: Refers to data breaches occurred because of an insider attack.<br/>4. Lost Media: Refers to data breaches occurred because of lost or Stolen Media.<br/>5. Poor Security : Refers to data breaches occurred due to poor security control implementations like weak operational security procedures/policy.<br/>
-    <br><u>Industries affected by the above methods of Data Breach range accross:</u><br/>
-    &bull;Government &bull;Retail &bull;Technology &bull;Financial &bull;Media &bull;Web(E-commerce) &bull;Transport &bull;Energy &bull;Telecommunication &bull;Gaming &bull;Military &bull;Academic &bull;Health care<br/></h1>
-  </div>
-
-  <div class="col-lg-11" id="mainPanel">
-    <div class="panel panel-primary"  style="border:1px solid #191951; background: black;">
-    	<div class="panel-body fixed-panel-main">
-    		<!-- <div class="row"> -->
-    			<div class="container-fluid">
-    				<div class="panel-body fixed-panel" id="d3visual" ></div>
-    			</div>
-    		<!-- </div> -->
-        <div class="col-lg-8">
-          <div class="panel panel-default"  style="border:1px solid #191951;">
-            <div class="panel-heading">
-              <h3 class="panel-title">Scatter plot</h3>
-            </div>
-        		<!-- <div class="row"> -->
-        			<!-- <div class="container"> -->
-        				<div class="panel-body fixed-panel" id="checkboxinfo" style="background:black;">
-                  <div class="row">
-          					<label class="checkbox-inline"><input type="checkbox"	value="government">Government</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="retail">Retail</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="tech">Tech</label>
-                    <label class="checkbox-inline"><input type="checkbox"	value="healthcare">Healthcare</label>
-                    <label class="checkbox-inline"><input type="checkbox"	value="media">Media</label>
-                    <label class="checkbox-inline"><input	type="checkbox" value="financial">Financial</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="web">Web(E-commerce)</label>
-                  </div>
-                  <div class="row">
-                    <label class="checkbox-inline"><input type="checkbox" value="transport">Transport</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="energy">Energy</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="academic">Academic</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="telecoms">Telecoms</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="gaming">Gaming</label>
-                    <label class="checkbox-inline"><input type="checkbox" value="military">Military</label>
-                  </div>
-                </div>
-              <!-- </div> -->
-            <!-- </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class='description'>
+		<h1 style="text-align: justify">
+			This visualization is a scatter plot representation to explain when
+			the data breach happened. The X-axis represents the year the breach
+			happened and Y axis represents the number of records stolen in the
+			data breach in logarithmic scale.<br /> <br> <u>Industries
+				affected by the Data Breach range across:</u><br /> &bull;Government
+			&bull;Retail &bull;Technology &bull;Financial &bull;Media
+			&bull;Web(E-commerce) &bull;Transport &bull;Energy
+			&bull;Telecommunication &bull;Gaming &bull;Military &bull;Academic
+			&bull;Health care<br />
+		</h1>
+	</div>
+	<div class='body'>
+		<div id="d3visual"></div>
+		<div id="filter">
+			<table id="checkboxinfo">
+				<tr>
+					<h1>
+						Add/Remove companies from scatter plot by Industries:
+						</h2>
+				</tr>
+				<tr>
+					<td><input type="checkbox" value="government">Government</td>
+					<td><input type="checkbox" value="retail">Retail</td>
+					<td><input type="checkbox" value="tech">Tech</td>
+					<td><input type="checkbox" value=healthcare>Healthcare</td>
+					<td><input type="checkbox" value="media">Media</td>
+					<td><input type="checkbox" value="financial">Financial</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" value="transport">Transport</td>
+					<td><input type="checkbox" value="energy">Energy</td>
+					<td><input type="checkbox" value="academic">Academic</td>
+					<td><input type="checkbox" value="telecoms">Telecoms</td>
+					<td><input type="checkbox" value="gaming">Gaming</td>
+					<td><input type="checkbox" value="military">Military</td>
+					<td><input type="checkbox" value="web">Web(E-commerce)</td>
+				</tr>
+			</table>
+		</div>
+		<div id='tip'>
+			<h1 style="text-align:justify">
+				Note: &bull; Hovering on the node will display the company name.<br />
+				&bull; On clicking the node once displays a short story of the data
+				breach.<br /> &bull; On double clicking the node opens the refernce
+				to the source article of the data breach reported by news media.
+			</h1>
+		</div>
+	</div>
 </body>
 
 
 <script>
-function created3(name)
-{
-  var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+	function created3(name) {
+		var margin = {
+			top : 20,
+			right : 20,
+			bottom : 30,
+			left : 40
+		}, width = 960 - margin.left - margin.right, height = 500 - margin.top
+				- margin.bottom;
 
-  /* 
-   * value accessor - returns the value to encode for a given data object.
-   * scale - maps value to a visual display encoding, such as a pixel position.
-   * map function - maps from data value to display value
-   * axis - sets up axis
-   */ 
-  // var parsedata = d3.time.format("%Y").parse;
-  // setup x 
+		var xValue = function(d) {
+			return d.year;
+		}, // data -> value
+		xScale = d3.scale.linear().range([ 0, width - 80 ]), // value -> display
+		xMap = function(d) {
+			var val = xValue(d);
+			return xScale(val);
+		}, // data -> display
+		xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(
+				function(d) {
+					var year = new Date(); //console.log(typeof d);
+					year.setFullYear(d);
+					return d3.time.format('%Y')(year);
+				});
+		// .style("fill","white");
 
-  // var superscript = "⁰¹²³⁴⁵⁶⁷⁸⁹",
-  //     formatPower = function(d) { return (d + "").split("").map(function(c) { return superscript[c]; }).join(""); };
+		// setup y
+		var yValue = function(d) {
+			return d.no_of_records_stolen;
+		}, // data -> value
+		yScale = d3.scale.log().base(Math.E).domain(
+				[ Math.exp(0), Math.exp(20) ]).range([ height, 0 ]), // value -> display
+		yMap = function(d) {
+			var val = yValue(d);
+			return yScale(val);
+		}, // data -> display if(isNaN(val)) console.log(d);
+		yAxis = d3.svg.axis().scale(yScale).orient("left").tickFormat(
+				function(d) {
+					return Math.round(Math.log(d));
+				});
 
-  var xValue = function(d) { return d.year;}, // data -> value
-      xScale = d3.scale.linear().range([0, width-80]), // value -> display
-      xMap = function(d) { var val=xValue(d); return xScale(val);}, // data -> display
-      xAxis = d3.svg.axis()
-      .scale(xScale)
-      .orient("bottom")
-      .tickFormat(function(d){ var year = new Date(); //console.log(typeof d);
-          year.setFullYear(d);
-          return d3.time.format('%Y')(year);
-      });
-      // .style("fill","white");
+		// setup fill color
+		var cValue = function(d) {
+			return d.organization;
+		}, color = d3.scale.category20();
 
-  // setup y
-  var yValue = function(d) { return d.no_of_records_stolen;}, // data -> value
-      yScale = d3.scale.log().base(Math.E).domain([Math.exp(0), Math.exp(20)]).range([height, 0]), // value -> display
-      yMap = function(d) {var val = yValue(d);  return yScale(val);}, // data -> display if(isNaN(val)) console.log(d);
-      yAxis = d3.svg.axis()
-      .scale(yScale)
-      .orient("left")
-      .tickFormat(function(d) { return Math.round(Math.log(d)); });
+		// add the graph canvas to the body of the webpage
+		var svg = d3.select("#d3visual").append("svg").attr("width",
+				width + margin.left + margin.right).attr("height",
+				height + margin.top + margin.bottom).append("g").attr(
+				"transform",
+				"translate(" + margin.left + "," + margin.top + ")");
 
+		// add the tooltip area to the webpage
+		// var tooltip = d3.select("body").append("div")
+		//     .attr("class", "tooltip")
+		//     .style("opacity", 0);
 
-  // setup fill color
-  var cValue = function(d) { return d.organization;},
-      color = d3.scale.category20c();
+		var tip = d3.tip().attr('class', 'd3-tip').offset([ -10, 0 ]).html(
+				function(d) {
+					return "<strong>" + d["entity"] + "</strong><br/>";
+				});
 
-  // add the graph canvas to the body of the webpage
-  var svg = d3.select("#d3visual").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		svg.call(tip);
 
-  // add the tooltip area to the webpage
-  // var tooltip = d3.select("body").append("div")
-  //     .attr("class", "tooltip")
-  //     .style("opacity", 0);
+		var storytip = d3.tip().attr('class', 'd3-tip').offset([ -10, 0 ])
+				.html(
+						function(d) {
+							return "<div style=' width: 300px'><p>"
+									+ d["story"] + "</p> <br/>Reference:"
+									+ d["1st source link"] + "</div>";
+						});
 
-  var tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-    return "<strong>"+d["entity"] + "</strong><br/>";
-  });
-  // .style("left", (d3.event.pageX + 5) + "px")
-  // .style("top", (d3.event.pageY - 28) + "px");
-  // .style("font-family","")
-  // .style("font-size","15px");
+		svg.call(storytip);
 
-  svg.call(tip);
+		// load data
+		d3.csv("dataSet.csv", function(error, data) {
 
-  var storytip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-    return "<div style=' width: 300px'><p>"+d["story"] + "</p> <br/>Reference:"+d["source_link"]+"</div>";
-  });
+			// console.log(data.length);
+			data = data.filter(function(d) {
+				if (name.indexOf(d.organization) == -1) {
+					return false;
+				}
+				// d.value = parseInt(d.value, 10);
+				return true;
+			});
+			// console.log(data.length);
+			// change string (from CSV) into number format
+			data.forEach(function(d) {
+				d.year = +d.year;
+				d.no_of_records_stolen = +d.no_of_records_stolen;
+				//    console.log(d);
+			});
 
-  svg.call(storytip);
+			// don't want dots overlapping axis, so add in buffer to data domain
+			xScale
+					.domain([ d3.min(data, xValue) - 1,
+							d3.max(data, xValue) + 1 ]);
+			yScale
+					.domain([ d3.min(data, yValue) - 1,
+							d3.max(data, yValue) + 1 ]);
 
-  // load data
-  d3.csv("dataSet.csv", function(error, data) {
+			// x-axis
+			svg.append("g").attr("class", "x axis").attr("transform",
+					"translate(0," + height + ")").call(xAxis).style("fill",
+					"white")
+					.style("font-family", "Iceland,sans-serif, cursive").style(
+							"font-size", "20px").append("text").attr("class",
+							"label").attr("x", width - 60).attr("y", -5).style(
+							"text-anchor", "end").text("Year").style("fill",
+							"white").style("font-family",
+							"Iceland,sans-serif, cursive").style("font-size",
+							"20px");
 
-    // console.log(data.length);
-    data = data.filter(function(d){
-        if(name.indexOf(d.organization)==-1){
-            return false;
-        }
-        // d.value = parseInt(d.value, 10);
-        return true;
-    });
-    // console.log(data.length);
-    // change string (from CSV) into number format
-    data.forEach(function(d) {
-      d.year = +d.year;
-      d.no_of_records_stolen = +d.no_of_records_stolen;
-  //    console.log(d);
-    });
+			// y-axis
+			svg.append("g").attr("class", "y axis").call(yAxis).style("fill",
+					"white")
+					.style("font-family", "Iceland,sans-serif, cursive").style(
+							"font-size", "20px").append("text").attr("class",
+							"label").attr("transform", " rotate(-90)").attr(
+							"y", 5).attr("dy", ".71em").style("text-anchor",
+							"end").text("No. of Records Stolen (log scale)")
+					.style("fill", "white").style("font-family",
+							"Iceland,sans-serif, cursive").style("font-size",
+							"20px");
 
-    // don't want dots overlapping axis, so add in buffer to data domain
-    xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-    yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
+			// draw dots
+			svg.selectAll(".dot").data(data).enter().append("circle").attr(
+					"class", "dot").attr("r", 4.5).attr("cx", xMap).attr("cy",
+					yMap).style("fill", function(d) {
+				return color(cValue(d));
+			}).on('mouseover', tip.show).on('mouseout', function(d) {
+				console.log("mouseout");
+				tip.hide(d);
+				storytip.hide(d);
+			}).on('click', function(d) {
+				console.log("click");
+				tip.hide(d);
+				storytip.show(d);
+			}).on('dblclick', function(d) {
+				console.log(d);
+				window.open(d["1st source link"]);
+			});
 
-    // x-axis
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis)
-        .style("fill","white")
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width-60)
-        .attr("y", -5)
-        .style("text-anchor", "end")
-        .text("Year")
-        .style("fill","white")
-        .style("font-family","Iceland,sans-serif, cursive")
-        .style("font-size","10px");
+			// draw legend
+			var legend = svg.selectAll(".legend").data(color.domain()).enter()
+					.append("g").attr("class", "legend").attr("transform",
+							function(d, i) {
+								return "translate(20," + i * 20 + ")";
+							});
 
-    // y-axis
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .style("fill","white")
-        .append("text")
-        .attr("class", "label")
-        .attr("transform", " rotate(-90)")
-        .attr("y", 5)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("No. of Records Stolen (log scale)")
-        .style("fill","white")
-        .style("font-family","Iceland,sans-serif, cursive")
-        .style("font-size","10px");
+			// draw legend colored rectangles
+			legend.append("rect").attr("x", width - 18).attr("width", 18).attr(
+					"height", 18).style("fill", color);
 
-    // draw dots
-    svg.selectAll(".dot")
-      // .attr("transform", "translate(50," + height + ")")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "dot")
-        .attr("r", 4.5)
-        .attr("cx", xMap)
-        .attr("cy", yMap)
-        .style("fill", function(d) { return color(cValue(d));})
-        .on('mouseover', tip.show)
-        .on('mouseout', function(d){ console.log("mouseout"); tip.hide(d); storytip.hide(d);})
-        .on('click', function(d){ console.log("click"); tip.hide(d); storytip.show(d);})
-        .on('dblclick',function(d) { console.log(d); window.open(d["1st source link"]);});
-        // .on("mouseover", function(d) {
-        //     tooltip.transition()
-        //          .duration(200)
-        //          .style("opacity", .9);
-        //     tooltip.html(d["entity"] + "<br/> (" + xValue(d) 
-  	     //    + ", " + yValue(d) + ")<br/>Story:"+d["story"])
-        //          .style("left", (d3.event.pageX + 5) + "px")
-        //          .style("top", (d3.event.pageY - 28) + "px")
-        //          .style("font-family","Iceland,sans-serif, cursive")
-        //          .style("font-size","15px");
-        // })
-        // .on("mouseout", function(d) {
-        //     tooltip.transition()
-        //          .duration(500)
-        //          .style("opacity", 0);
-        // })
-        // .on("click", function(d){
-        //     // <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Small modal</button>
-
-
-        // });
-
-    // draw legend
-    var legend = svg.selectAll(".legend")
-        .data(color.domain())
-      .enter().append("g")
-        .attr("class", "legend")
-        .attr("transform", function(d, i) { return "translate(20," + i * 20 + ")"; });
-
-    // draw legend colored rectangles
-    legend.append("rect")
-        .attr("x", width - 18)
-        .attr("width", 18)
-        .attr("height", 18)
-        .style("fill", color);
-
-    // draw legend text
-    legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9)
-        .attr("dy", ".35em")
-        .style("text-anchor", "end")
-        .style("fill","white")
-        .text(function(d) { return d;})
-  });
-}
-$(document).ready(function(){
-    var arr=["government"];
-     $('#checkboxinfo :input[value="government"]').prop('checked',true);
-  created3(arr);
-});
-$('#checkboxinfo :input[type="checkbox"]').on('click',function(){
-    var arr = []
-    $('#checkboxinfo :input').each(function(){
-        if(this.checked){
-            // console.log(this.value);
-            arr.push(this.value);
-        }
-    })
-    // console.log(arr);
-    $('#d3visual').empty();
-    created3(arr);
-});
+			// draw legend text
+			legend.append("text").attr("x", width - 24).attr("y", 9).attr("dy",
+					".35em").style("text-anchor", "end").style("fill", "white")
+					.style("font-family", "Iceland,sans-serif, cursive").style(
+							"font-size", "20px").text(function(d) {
+						return d;
+					})
+		});
+	}
+	$(document).ready(function() {
+		var arr = [ "government" ];
+		$('#checkboxinfo :input[value="government"]').prop('checked', true);
+		created3(arr);
+	});
+	$('#checkboxinfo :input[type="checkbox"]').on('click', function() {
+		var arr = []
+		$('#checkboxinfo :input').each(function() {
+			if (this.checked) {
+				// console.log(this.value);
+				arr.push(this.value);
+			}
+		})
+		// console.log(arr);
+		$('#d3visual').empty();
+		created3(arr);
+	});
 </script>
-
+<script type="text/javascript">
+	swal(
+			'When the Data Breaches Happened?',
+			'This visualization is a scatter plot representation of when data breach occurred at different companies')
+</script>
 </html>

@@ -146,13 +146,14 @@ Bundling
 </div>
 
 <script id="progressive">// load csv file and create the chart
-var colors = d3.scale.category20c(); 
+var colors = d3.scale.category20(); 
 
 d3.csv('../dataSet.csv', function(data) {
   var colorgen = d3.scale.ordinal()
     .range(["#a6cee3","#1f78b4","#b2df8a","#33a02c",
             "#fb9a99","#e31a1c","#fdbf6f","#ff7f00",
             "#cab2d6","#6a3d9a","#ffff99","#b15928"]);
+  
   
  var color = function(d) { return colors(d.data_sensitivity); };
 
